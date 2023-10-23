@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TaskStatus } from './task-status.enum';
-import { TaskEntity } from './task.entity';
+import { Task } from './task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
@@ -10,15 +10,15 @@ import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 @Injectable()
 export class TasksService {
   constructor(
-    @InjectRepository(TaskEntity)
-    private tasksRepository: Repository<TaskEntity>,
+    @InjectRepository(Task)
+    private tasksRepository: Repository<Task>,
   ) {}
 
-  getAllTasks(): Promise<TaskEntity[]> {
+  getAllTasks(): Promise<Task[]> {
     return this.tasksRepository.find();
   }
 
-  getTasksWithFilters(filterDto: GetTasksFilterDto): Promise<TaskEntity[]> {
+  getTasksWithFilters(filterDto: GetTasksFilterDto): Promise<Task[]> {
     const { status, search } = filterDto;
 
     const query = this.tasksRepository.createQueryBuilder('task');
@@ -37,7 +37,7 @@ export class TasksService {
     return query.getMany();
   }
 
-  async getTaskById(id: string): Promise<TaskEntity> {
+  async getTaskById(id: string): Promise<Task> {
     const task = await this.tasksRepository.findOneBy({ id });
 
     if (!task) {
@@ -47,7 +47,7 @@ export class TasksService {
     return task;
   }
 
-  async createTask(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
+  async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     const { title, description } = createTaskDto;
 
     const task = this.tasksRepository.create({
@@ -61,7 +61,7 @@ export class TasksService {
     return task;
   }
 
-  async deleteTaskById(id: string): Promise<TaskEntity> {
+  async deleteTaskById(id: string): Promise<Task> {
     const task = await this.getTaskById(id);
 
     return this.tasksRepository.remove(task);
@@ -70,7 +70,7 @@ export class TasksService {
   async updateTaskStatusById(
     id: string,
     updateTaskStatusDto: UpdateTaskStatusDto,
-  ): Promise<TaskEntity> {
+  ): Promise<Task> {
     const task = await this.getTaskById(id);
     const { status } = updateTaskStatusDto;
 
