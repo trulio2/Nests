@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task } from './task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
@@ -11,30 +11,47 @@ export class TasksService {
   constructor(private tasksRepository: TasksRepository) {}
 
   getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
-    return this.tasksRepository.getTasks(filterDto, user);
+    return this.tasksRepository.find(filterDto, user);
   }
 
-  getTaskById(id: string, user: User): Promise<Task> {
-    return this.tasksRepository.getTaskById(id, user);
+  async getTaskById(id: string, user: User): Promise<Task> {
+    const task = await this.tasksRepository.findOne(id, user);
+
+    if (!task) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
+
+    return task;
   }
 
   createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
-    return this.tasksRepository.createTask(createTaskDto, user);
+    return this.tasksRepository.create(createTaskDto, user);
   }
 
-  deleteTaskById(id: string, user: User): Promise<Task> {
-    return this.tasksRepository.deleteTaskById(id, user);
+  async deleteTaskById(id: string, user: User): Promise<Task> {
+    const task = await this.tasksRepository.findOne(id, user);
+
+    if (!task) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
+
+    return this.tasksRepository.delete(task);
   }
 
-  updateTaskStatusById(
+  async updateTaskStatusById(
     id: string,
     updateTaskStatusDto: UpdateTaskStatusDto,
     user: User,
   ): Promise<Task> {
-    return this.tasksRepository.updateTaskStatusById(
-      id,
-      updateTaskStatusDto,
-      user,
-    );
+    const task = await this.tasksRepository.findOne(id, user);
+    const { status } = updateTaskStatusDto;
+
+    if (!task) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
+
+    task.status = status;
+
+    return this.tasksRepository.update(task);
   }
 }

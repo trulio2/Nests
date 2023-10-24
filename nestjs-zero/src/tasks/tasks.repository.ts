@@ -3,14 +3,12 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
-  NotFoundException,
 } from '@nestjs/common';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { User } from '../auth/user.entity';
 import { Task } from './task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TaskStatus } from './task-status.enum';
-import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -22,7 +20,7 @@ export class TasksRepository {
 
   private logger = new Logger('TasksRepository');
 
-  async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
+  async find(filterDto: GetTasksFilterDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
 
     const query = this.baseRepository.createQueryBuilder('task');
@@ -52,17 +50,11 @@ export class TasksRepository {
     }
   }
 
-  async getTaskById(id: string, user: User): Promise<Task> {
-    const task = await this.baseRepository.findOneBy({ id, user });
-
-    if (!task) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
-    }
-
-    return task;
+  findOne(id: string, user: User): Promise<Task> {
+    return this.baseRepository.findOneBy({ id, user });
   }
 
-  createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+  create(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
     const { title, description } = createTaskDto;
 
     const task = this.baseRepository.create({
@@ -75,22 +67,11 @@ export class TasksRepository {
     return this.baseRepository.save(task);
   }
 
-  async deleteTaskById(id: string, user: User): Promise<Task> {
-    const task = await this.getTaskById(id, user);
-
+  delete(task: Task): Promise<Task> {
     return this.baseRepository.remove(task);
   }
 
-  async updateTaskStatusById(
-    id: string,
-    updateTaskStatusDto: UpdateTaskStatusDto,
-    user: User,
-  ): Promise<Task> {
-    const task = await this.getTaskById(id, user);
-    const { status } = updateTaskStatusDto;
-
-    task.status = status;
-
+  update(task: Task): Promise<Task> {
     return this.baseRepository.save(task);
   }
 }
