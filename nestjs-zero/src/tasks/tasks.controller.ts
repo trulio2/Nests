@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
   Query,
@@ -36,7 +37,10 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getTaskById(@Param('id') id: string, @GetUser() user: User): Promise<Task> {
+  getTaskById(
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser() user: User,
+  ): Promise<Task> {
     this.logger.verbose(`User "${user.username}" getTaskById: ${id}`);
 
     return this.tasksService.getTaskById(id, user);
@@ -56,7 +60,7 @@ export class TasksController {
 
   @Delete('/:id')
   deleteTaskById(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @GetUser() user: User,
   ): Promise<Task> {
     return this.tasksService.deleteTaskById(id, user);
@@ -64,7 +68,7 @@ export class TasksController {
 
   @Patch('/:id/status')
   updateTaskStatusById(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
     @GetUser() user: User,
   ): Promise<Task> {
