@@ -17,6 +17,9 @@ export class Task {
   @Column()
   status: TaskStatus;
 
+  @Column()
+  abc: string;
+
   @ManyToOne(() => User, (user) => user.tasks, { eager: false })
   @Exclude({ toPlainOnly: true })
   user: User;

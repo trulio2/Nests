@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Event } from './entities/event.entity';
-import { UpdateEventDto } from './dto/update-event.dto';
-import { CreateEventDto } from './dto/create-event.dto';
+import { CreateEventDto, UpdateEventDto } from './dto';
 import { EventsRepository } from './events.repository';
 
 @Injectable()
