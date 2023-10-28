@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Cat } from '../../cats/entities';
 
 @Entity()
 export class User {
@@ -21,4 +22,7 @@ export class User {
 
   @Column()
   lastName: string;
+
+  @OneToMany(() => Cat, (cat) => cat.user, { eager: true })
+  cats: Cat[];
 }

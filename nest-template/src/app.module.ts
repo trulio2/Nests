@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './db/ormconfig';
 import { AuthModule } from './auth/auth.module';
 import { configValidationSchema } from './config.schema';
+import { CatsModule } from './cats/cats.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { configValidationSchema } from './config.schema';
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     AuthModule,
+    CatsModule,
   ],
 })
 export class AppModule {}
