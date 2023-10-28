@@ -23,7 +23,7 @@ export class AuthRepository {
     return null;
   }
 
-  async signUp(createUserDto: CreateUserDto): Promise<void> {
+  async signUp(createUserDto: CreateUserDto): Promise<User> {
     const { username, password, email, firstName, lastName } = createUserDto;
 
     const salt = await bcrypt.genSalt();
@@ -37,6 +37,6 @@ export class AuthRepository {
       lastName,
     });
 
-    await this.baseRepository.save(user);
+    return await this.baseRepository.save(user);
   }
 }

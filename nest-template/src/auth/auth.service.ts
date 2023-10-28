@@ -20,13 +20,12 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
-    const { username } = signInDto;
-    const userSignIn = await this.usersRepository.signIn(signInDto);
+    const signedInUser = await this.usersRepository.signIn(signInDto);
 
-    if (userSignIn) {
-      const payload: JwtPayload = { username };
+    if (signedInUser) {
+      const payload: JwtPayload = { username: signedInUser.username };
       const accessToken: string = this.jwtService.sign(payload);
-      this.logger.verbose(`User ${username} signed in`);
+      this.logger.verbose(`User ${signedInUser.username} signed in`);
 
       return {
         accessToken,
@@ -36,13 +35,12 @@ export class AuthService {
   }
 
   async signUp(createUserDto: CreateUserDto): Promise<{ accessToken: string }> {
-    const { username } = createUserDto;
     try {
-      await this.usersRepository.signUp(createUserDto);
+      const newUser = await this.usersRepository.signUp(createUserDto);
 
-      const payload: JwtPayload = { username };
+      const payload: JwtPayload = { username: newUser.username };
       const accessToken: string = this.jwtService.sign(payload);
-      this.logger.verbose(`User ${username} signed up`);
+      this.logger.verbose(`User ${newUser.username} signed up`);
 
       return {
         accessToken,
