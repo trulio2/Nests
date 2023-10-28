@@ -11,12 +11,12 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from '../auth/decorators/get-user.decorator';
+import { User } from '../auth/entities';
 import { CatsService } from './cats.service';
 import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dto';
 import { Cat } from './entities';
-import { GetUser } from '../auth/decorators/get-user.decorator';
-import { AuthGuard } from '@nestjs/passport';
-import { User } from 'src/auth/entities';
 
 @Controller('/cats')
 @UseGuards(AuthGuard())
