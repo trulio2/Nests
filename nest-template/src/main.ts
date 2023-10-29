@@ -8,7 +8,11 @@ async function bootstrap() {
   const port = process.env.PORT;
 
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
   app.useGlobalInterceptors(new TransformInterceptor());
   app.enableCors();
 

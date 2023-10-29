@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/decorators';
 import { User } from '../auth/entities';
 import { CatsService } from './cats.service';
-import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dto';
+import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dtos';
 import { Cat } from './entities';
 
 @Controller('cats')

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from './auth.repository';
-import { CreateUserDto, SignInDto } from './dto';
+import { CreateUserDto, SignInDto } from './dtos';
 import { JwtPayload } from './strategies/jwt-payload.interface';
 
 @Injectable()

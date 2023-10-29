@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { User } from '../auth/entities';
 import { CatsRepository } from './cats.repository';
-import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dto';
+import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dtos';
 import { Cat } from './entities';
 
 @Injectable()
