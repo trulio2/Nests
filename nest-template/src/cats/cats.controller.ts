@@ -12,7 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from '../auth/decorators/get-user.decorator';
+import { GetUser } from '../auth/decorators';
 import { User } from '../auth/entities';
 import { CatsService } from './cats.service';
 import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dto';
