@@ -6,12 +6,12 @@ import { CreateUserDto, SignInDto } from './dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/signin')
+  @Post('signin')
   signIn(@Body() signInDto: SignInDto): Promise<{ accessToken: string }> {
     return this.authService.signIn(signInDto);
   }
 
-  @Post('/signup')
+  @Post('signup')
   signUp(
     @Body() createUserDto: CreateUserDto,
   ): Promise<{ accessToken: string }> {

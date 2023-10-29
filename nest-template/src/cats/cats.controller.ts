@@ -18,7 +18,7 @@ import { CatsService } from './cats.service';
 import { CreateCatDto, UpdateCatDto, GetCatsFilterDto } from './dto';
 import { Cat } from './entities';
 
-@Controller('/cats')
+@Controller('cats')
 @UseGuards(AuthGuard())
 export class CatsController {
   private readonly logger = new Logger('CatsController');
